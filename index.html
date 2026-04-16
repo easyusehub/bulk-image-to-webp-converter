@@ -1,59 +1,83 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>Bulk Image to WebP Converted – EasyUseHub</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bulk Image to WebP Converter | EasyUseHub</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+    
+    <style>
+        :root { --primary: #0052ff; --black: #050505; --gray: #f2f4f7; --border: #e5e7eb; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; }
+        body { background: #ffffff; color: var(--black); line-height: 1.5; position: relative; overflow-x: hidden; text-align: center; }
 
-<style>
-body{ margin:0; font-family:Arial; background:#f5f7fa; text-align:center; position: relative; overflow-x: hidden; }
-header{ background:#fff; padding:15px; box-shadow:0 2px 5px rgba(0,0,0,.1); }
-.container{ width:90%; max-width:900px; margin:30px auto; }
+        /* --- YOUR PUSH AD STYLE --- */
+        #push-notification {
+            position: fixed; bottom: -150px; right: 20px; width: 300px;
+            background: #fff; border-radius: 10px; box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            display: flex; align-items: center; padding: 12px; z-index: 10000;
+            transition: bottom 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55); cursor: pointer; border-left: 5px solid #2563eb;
+        }
+        #push-notification.active { bottom: 20px; }
+        #push-notification img { width: 50px; height: 50px; border-radius: 8px; margin-right: 12px; }
+        .push-text { text-align: left; flex: 1; }
+        .push-text b { font-size: 14px; color: #222; display: block; }
+        .push-text p { font-size: 12px; color: #666; margin: 3px 0 0 0; }
+        .close-push { position: absolute; top: 5px; right: 8px; font-size: 18px; color: #aaa; cursor: pointer; }
 
-/* Push Ad Style */
-#push-notification {
-    position: fixed; bottom: -150px; right: 20px; width: 300px;
-    background: #fff; border-radius: 10px; box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-    display: flex; align-items: center; padding: 12px; z-index: 10000;
-    transition: bottom 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55); cursor: pointer; border-left: 5px solid #2563eb;
-}
-#push-notification.active { bottom: 20px; }
-#push-notification img { width: 50px; height: 50px; border-radius: 8px; margin-right: 12px; }
-.push-text { text-align: left; flex: 1; }
-.push-text b { font-size: 14px; color: #222; display: block; }
-.push-text p { font-size: 12px; color: #666; margin: 3px 0 0 0; }
-.close-push { position: absolute; top: 5px; right: 8px; font-size: 18px; color: #aaa; cursor: pointer; }
+        /* --- YOUR CUSTOM AD BRIDGE STYLE --- */
+        .custom-ad-bridge {
+            background: linear-gradient(135deg, #1e3a8a, #2563eb); color: white;
+            padding: 25px; margin: 20px 0; border-radius: 12px; cursor: pointer;
+            box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3); transition: transform 0.2s; text-align: center;
+        }
+        .custom-ad-bridge:hover { transform: scale(1.01); }
+        .ad-title { font-size: 20px; font-weight: bold; margin-bottom: 10px; display: block; }
+        .ad-btn { background: #fbbf24; color: #000; padding: 8px 20px; border-radius: 5px; font-weight: bold; text-transform: uppercase; display: inline-block; margin-top: 10px; }
 
-/* Custom Ad Banner Style */
-.custom-ad-bridge {
-    background: linear-gradient(135deg, #1e3a8a, #2563eb); color: white;
-    padding: 25px; margin: 20px 0; border-radius: 12px; cursor: pointer;
-    box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3); transition: transform 0.2s;
-}
-.custom-ad-bridge:hover { transform: scale(1.02); }
-.ad-title { font-size: 20px; font-weight: bold; margin-bottom: 10px; display: block; }
-.ad-btn { background: #fbbf24; color: #000; padding: 8px 20px; border-radius: 5px; font-weight: bold; text-transform: uppercase; display: inline-block; margin-top: 10px; }
+        header { padding: 15px 30px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; background: #fff; z-index: 100; }
+        .logo { font-weight: 800; font-size: 22px; color: var(--black); text-decoration: none; letter-spacing: -1.2px; }
 
-/* Tool UI */
-.upload-btn{ display:inline-block; padding:15px 30px; background:#2563eb; color:#fff; border-radius:6px; cursor:pointer; margin:20px 0; font-weight: bold; }
-.btn-convert { background: #000 !important; }
-.btn-download { background: #10b981 !important; animation: pulse 2s infinite; }
-@keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4); } 70% { box-shadow: 0 0 0 10px rgba(16, 185, 129, 0); } 100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); } }
+        .main-layout { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 1fr 300px; gap: 30px; padding: 30px 20px; }
+        @media (max-width: 992px) { .main-layout { grid-template-columns: 1fr; } .side-ad-wrap { display: none; } }
 
-.progress-wrap { margin: 20px 0; display: none; }
-.progress-bg { background: #ddd; height: 10px; border-radius: 5px; overflow: hidden; width: 100%; }
-#bar { height: 100%; width: 0%; background: #2563eb; transition: 0.3s; }
+        .tool-container { background: #fff; text-align: left; }
+        h1 { font-size: clamp(28px, 5vw, 42px); font-weight: 800; letter-spacing: -2px; line-height: 1.1; margin-bottom: 15px; text-align: left; }
+        .subtitle { color: #666; margin-bottom: 35px; font-size: 16px; text-align: left; }
 
-.file-list { text-align: left; background: #fff; padding: 10px; border-radius: 8px; margin-top: 20px; display: none; border: 1px solid #ddd; }
+        .dropzone { 
+            border: 2px dashed #ddd; border-radius: 24px; padding: 70px 20px; text-align: center; 
+            cursor: pointer; transition: all 0.3s ease; background: var(--gray); position: relative;
+        }
+        .dropzone:hover { border-color: var(--primary); background: #f0f6ff; }
+        .dropzone-icon { font-size: 40px; margin-bottom: 15px; display: block; }
+        
+        .btn { 
+            width: 100%; padding: 18px; border-radius: 16px; font-weight: 800; border: none; 
+            cursor: pointer; font-size: 16px; margin-top: 20px; transition: 0.2s; display: none; 
+        }
+        .btn-start { background: var(--black); color: #fff; }
+        .btn-dl { background: var(--primary); color: #fff; animation: pulse 2s infinite; }
+        @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(0,82,255,0.4); } 70% { box-shadow: 0 0 0 15px rgba(0,82,255,0); } 100% { box-shadow: 0 0 0 0 rgba(0,82,255,0); } }
 
-.buttons{ margin-top:30px; }
-.buttons button{ padding:12px 25px; margin:5px; border:none; border-radius:5px; cursor:pointer; color:#fff; font-weight: bold; }
-.tools{ background:#10b981; }
-.home{ background:#f59e0b; }
-#f-input { display: none; }
-</style>
+        .status-box { margin-top: 25px; display: none; }
+        .progress-bar { background: #eee; height: 12px; border-radius: 20px; overflow: hidden; margin-top: 10px; }
+        #fill { width: 0%; height: 100%; background: var(--primary); transition: width 0.3s linear; }
+        
+        .file-list { margin-top: 25px; border: 1px solid var(--border); border-radius: 16px; max-height: 200px; overflow-y: auto; font-size: 13px; text-align: left; }
+        .file-item { padding: 12px 20px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+        
+        /* FOOTER BUTTONS */
+        .bottom-buttons{ margin-top:30px; display: flex; justify-content: center; gap: 10px; }
+        .bottom-buttons button{ padding:12px 25px; border:none; border-radius:8px; cursor:pointer; color:#fff; font-weight: bold; transition: 0.2s; }
+        .tools-btn{ background:#10b981; }
+        .home-btn{ background:#f59e0b; }
+        .bottom-buttons button:hover { opacity: 0.9; transform: translateY(-2px); }
+
+        #fileInput { display: none; }
+    </style>
 </head>
 <body>
 
@@ -62,133 +86,154 @@ header{ background:#fff; padding:15px; box-shadow:0 2px 5px rgba(0,0,0,.1); }
     <img src="https://cdn-icons-png.flaticon.com/512/5968/5968313.png" alt="icon">
     <div class="push-text">
         <b>🚀 46+ Pro Tools Ready!</b>
-        <p>ALL PDF TOOLS, Calculators & AI tools at EasyUseHub.</p>
+        <p>ALL PDF TOOLS, All calculators, Image Compressor & AI tools at EasyUseHub.</p>
     </div>
 </div>
 
 <header>
-<h2>Bulk Image to WebP – EasyUseHub</h2>
+    <a href="#" class="logo">EasyUseHub</a>
+    <div style="font-size: 12px; font-weight: 700; background: #000; color: #fff; padding: 4px 12px; border-radius: 20px;">v2.0 PRO</div>
 </header>
 
-<div class="container">
-
-<div class="custom-ad-bridge" onclick="window.open('https://easyusehub.blogspot.com', '_blank')">
-    <span class="ad-title">🚀 Try 46+ Premium Free Web Tools!</span>
-    <p>All PDF TOOLS, Calculators, Image Resizer & More - 100% Free</p>
-    <div class="ad-btn">Open EasyUseHub</div>
-</div>
-
-<div style="background: #fff; padding: 30px; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.05);">
-    <h3 style="margin-bottom: 10px;">Select Images to Convert</h3>
-    <label class="upload-btn" for="f-input">
-        Choose Images
-    </label>
-    <input type="file" id="f-input" multiple accept="image/*">
-
-    <div class="progress-wrap" id="pwrap">
-        <div style="display:flex; justify-content:space-between; margin-bottom:5px; font-size:13px; font-weight:bold;">
-            <span id="pstat">Converting...</span>
-            <span id="ppercent">0%</span>
+<div class="main-layout">
+    <div class="tool-section">
+        
+        <div class="custom-ad-bridge" onclick="window.open('https://easyusehub.blogspot.com', '_blank')">
+            <span class="ad-title">🚀 Try 46+ Premium Free Web Tools!</span>
+            <p>All PDF TOOLS, Calculators, Image Resizer & More - 100% Free</p>
+            <div class="ad-btn">Open EasyUseHub</div>
         </div>
-        <div class="progress-bg"><div id="bar"></div></div>
+
+        <div class="tool-container">
+            <h1>Bulk Convert to <span style="color:var(--primary)">WebP</span></h1>
+            <p class="subtitle">Fast, secure, and unlimited bulk image optimization.</p>
+
+            <div class="dropzone" id="dropzone" onclick="document.getElementById('fileInput').click()">
+                <span class="dropzone-icon">☁️</span>
+                <strong style="font-size: 20px;">Drop Images or Click to Upload</strong>
+                <p style="color: #888; margin-top: 8px;">Supports PNG, JPG, JPEG (Max 50MB/file)</p>
+            </div>
+            <input type="file" id="fileInput" multiple accept="image/*">
+
+            <div class="status-box" id="statusBox">
+                <div style="display:flex; justify-content:space-between; font-weight:800; font-size:14px;">
+                    <span id="pLabel">Processing Files...</span>
+                    <span id="pPercent">0%</span>
+                </div>
+                <div class="progress-bar"><div id="fill"></div></div>
+            </div>
+
+            <div class="file-list" id="fileList"></div>
+
+            <button class="btn btn-start" id="startBtn">START BULK CONVERSION</button>
+            <button class="btn btn-dl" id="dlBtn">DOWNLOAD ALL AS ZIP</button>
+
+            <div class="custom-ad-bridge" style="background: linear-gradient(135deg, #059669, #10b981);" onclick="window.open('https://easyusehub.blogspot.com/p/image-compressor.html', '_blank')">
+                <span class="ad-title">⚡ High-Speed Image Compressor</span>
+                <p>Compress your images without losing quality at EasyUseHub</p>
+                <div class="ad-btn" style="background: #fff;">Try Now</div>
+            </div>
+        </div>
     </div>
 
-    <div class="file-list" id="flist"></div>
+    <aside class="side-ad-wrap">
+        <div class="custom-ad-bridge" style="background: linear-gradient(135deg, #f59e0b, #d97706); padding: 40px 15px;" onclick="window.open('https://easyusehub.blogspot.com/p/ultimate-calculators-hub.html', '_blank')">
+            <span class="ad-title" style="font-size: 16px;">🔢 Smart Calculators</span>
+            <p style="font-size: 12px;">Loan EMI, Age, BMI Tracker at your fingertips.</p>
+            <div class="ad-btn" style="background: #000; color: #fff; font-size: 10px;">Open Hub</div>
+        </div>
 
-    <button id="startBtn" class="upload-btn btn-convert" style="display:none; width:100%; border:none;">START CONVERTING</button>
-    <button id="dlBtn" class="upload-btn btn-download" style="display:none; width:100%; border:none;">DOWNLOAD ZIP</button>
+        <div style="background: var(--gray); padding: 25px; border-radius: 20px; margin-top: 20px; text-align: left;">
+            <h4 style="margin-bottom: 12px; font-weight: 800;">🚀 Why WebP?</h4>
+            <ul style="font-size: 13px; color: #444; list-style: none; padding: 0;">
+                <li style="margin-bottom: 10px;">✅ <strong>3x Faster</strong> load speed.</li>
+                <li style="margin-bottom: 10px;">✅ <strong>Better SEO</strong> ranking.</li>
+                <li>✅ <strong>80% Smaller</strong> size.</li>
+            </ul>
+        </div>
+    </aside>
 </div>
 
-<div class="custom-ad-bridge" style="background: linear-gradient(135deg, #059669, #10b981);" onclick="window.open('https://easyusehub.blogspot.com/p/image-compressor.html', '_blank')">
-    <span class="ad-title">⚡ High-Speed Image Compressor</span>
-    <p>Compress your images without losing quality at EasyUseHub</p>
-    <div class="ad-btn" style="background: #fff;">Try Now</div>
-</div>
-
-<div class="custom-ad-bridge" style="background: linear-gradient(135deg, #f59e0b, #d97706);" onclick="window.open('https://easyusehub.blogspot.com/p/ultimate-calculators-hub.html', '_blank')">
-    <span class="ad-title">🔢 Smart Financial & Health Calculators</span>
-    <p>Loan EMI, Age Calculator, and BMI Tracker at your fingertips.</p>
-    <div class="ad-btn" style="background: #000; color: #fff;">Open Calculators</div>
-</div>
-
-<div class="buttons">
-<button class="tools" onclick="window.location.href='https://easyusehub.blogspot.com/p/free-pdf-tools-online.html'">All PDF Tools</button>
-<button class="home" onclick="window.location.href='https://easyusehub.blogspot.com'">Home</button>
-</div>
-
+<div class="bottom-buttons">
+    <button class="tools-btn" onclick="window.location.href='https://easyusehub.blogspot.com/p/free-pdf-tools-online.html'">All PDF Tools</button>
+    <button class="home-btn" onclick="window.location.href='https://easyusehub.blogspot.com'">Home</button>
 </div>
 
 <script>
-const fInput = document.getElementById('f-input');
-const flist = document.getElementById('flist');
-const startBtn = document.getElementById('startBtn');
-const dlBtn = document.getElementById('dlBtn');
-const bar = document.getElementById('bar');
-const pwrap = document.getElementById('pwrap');
-const ppercent = document.getElementById('ppercent');
-const pstat = document.getElementById('pstat');
+    const fInput = document.getElementById('fileInput');
+    const fList = document.getElementById('fileList');
+    const startBtn = document.getElementById('startBtn');
+    const dlBtn = document.getElementById('dlBtn');
+    const fill = document.getElementById('fill');
+    const statusBox = document.getElementById('statusBox');
+    const pPercent = document.getElementById('pPercent');
+    const pLabel = document.getElementById('pLabel');
 
-let files = [];
-const zip = new JSZip();
+    let files = [];
+    const zip = new JSZip();
 
-fInput.onchange = (e) => {
-    files = Array.from(e.target.files);
-    if(files.length > 0) {
-        flist.innerHTML = '';
-        flist.style.display = 'block';
-        startBtn.style.display = 'block';
-        dlBtn.style.display = 'none';
-        pwrap.style.display = 'none';
-        files.forEach(f => {
-            const div = document.createElement('div');
-            div.style.padding = '5px 0';
-            div.style.fontSize = '12px';
-            div.style.borderBottom = '1px solid #eee';
-            div.innerHTML = `📄 ${f.name}`;
-            flist.appendChild(div);
+    fInput.onchange = (e) => {
+        files = Array.from(e.target.files);
+        if(files.length > 0) {
+            fList.innerHTML = '';
+            fList.style.display = 'block';
+            startBtn.style.display = 'block';
+            dlBtn.style.display = 'none';
+            statusBox.style.display = 'none';
+            files.forEach(f => {
+                const item = document.createElement('div');
+                item.className = 'file-item';
+                item.innerHTML = `<span>📄 ${f.name.substring(0,25)}...</span><span style="color:var(--primary); font-weight:bold;">READY</span>`;
+                fList.appendChild(item);
+            });
+        }
+    };
+
+    startBtn.onclick = async () => {
+        startBtn.style.display = 'none';
+        statusBox.style.display = 'block';
+        
+        for (let i = 0; i < files.length; i++) {
+            const f = files[i];
+            try {
+                const blob = await convertToWebp(f);
+                zip.file(f.name.replace(/\.[^/.]+$/, "") + ".webp", blob);
+                
+                let p = Math.round(((i + 1) / files.length) * 100);
+                fill.style.width = p + '%';
+                pPercent.innerText = p + '%';
+            } catch(e) { console.error(e); }
+        }
+        
+        pLabel.innerText = "Done!";
+        dlBtn.style.display = 'block';
+
+        // SHOW PUSH NOTIFICATION ON FINISH
+        setTimeout(() => {
+            document.getElementById('push-notification').classList.add('active');
+        }, 800);
+
+        dlBtn.onclick = () => {
+            zip.generateAsync({type:"blob"}).then(c => saveAs(c, "EasyUseHub_WebP_Pack.zip"));
+        };
+    };
+
+    function convertToWebp(file) {
+        return new Promise(res => {
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = (e) => {
+                const img = new Image();
+                img.src = e.target.result;
+                img.onload = () => {
+                    const canvas = document.createElement('canvas');
+                    canvas.width = img.width; canvas.height = img.height;
+                    canvas.getContext('2d').drawImage(img, 0, 0);
+                    canvas.toBlob(b => res(b), 'image/webp', 0.82);
+                };
+            };
         });
     }
-};
-
-startBtn.onclick = async () => {
-    startBtn.style.display = 'none';
-    pwrap.style.display = 'block';
-    
-    for (let i = 0; i < files.length; i++) {
-        const f = files[i];
-        const blob = await convert(f);
-        zip.file(f.name.split('.')[0] + ".webp", blob);
-        
-        let p = Math.round(((i + 1) / files.length) * 100);
-        bar.style.width = p + '%';
-        ppercent.innerText = p + '%';
-    }
-    
-    pstat.innerText = "Done!";
-    dlBtn.style.display = 'block';
-    
-    // Show Push Ad after conversion
-    setTimeout(() => {
-        document.getElementById('push-notification').classList.add('active');
-    }, 500);
-
-    dlBtn.onclick = () => {
-        zip.generateAsync({type:"blob"}).then(c => saveAs(c, "EasyUseHub_WebP.zip"));
-    };
-};
-
-function convert(file) {
-    return new Promise(res => {
-        const img = new Image();
-        img.src = URL.createObjectURL(file);
-        img.onload = () => {
-            const canvas = document.createElement('canvas');
-            canvas.width = img.width; canvas.height = img.height;
-            canvas.getContext('2d').drawImage(img, 0, 0);
-            canvas.toBlob(b => res(b), 'image/webp', 0.8);
-        };
-    });
-}
 </script>
 
 </body>
